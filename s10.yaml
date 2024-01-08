@@ -1,0 +1,31 @@
+id: template-id
+info:
+  name: Info-Disclosure
+  author: badhacker0x1
+  severity: high
+  description: description
+  reference:
+    - https://twitter.com/TodayCyberNews/status/1629462603578884096/photo/1
+  tags: tags
+requests:
+  - raw:
+      - |+
+        GET /dberror.php HTTP/1.1
+        Host: {{Hostname}}
+        Cache-Control: max-age=0
+        Upgrade-Insecure-Requests: 1
+        User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36
+        Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8
+        Sec-GPC: 1
+        Accept-Language: en-GB,en
+        Accept-Encoding: gzip, deflate
+        Cookie: session_id_8000=39c7d2200dd73d16dfa42e961e06ecfa2d8762d5
+        Connection: close
+
+    matchers:
+      - type: word
+        part: body
+        words:
+          - $hostname
+          - $port
+          - $username

